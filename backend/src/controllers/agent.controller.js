@@ -104,7 +104,7 @@ export const logOut = asyncHandler(async (req, res) => {
 
 /**
  * @desc Update Agent Profile
- * @route PUT update/:AgentId
+ * @route PUT update/:agentId
  * @access Private (Agent/Admin)
  */
 export const updateAgent = asyncHandler(async (req, res) => {
