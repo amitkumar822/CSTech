@@ -1,7 +1,8 @@
+import { Agent } from "../models/agent.model.js";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
-const createTokensAndSaveCookies = async (userId, res) => {
+const createTokensAndSaveCookies = async (userId, res, category) => {
   // Generate Access Token
   const accessToken = jwt.sign({ userId }, process.env.JWT_ACCESS_SECRET_KEY, {
     expiresIn: process.env.JWT_ACCESS_EXPIRES,
@@ -31,7 +32,11 @@ const createTokensAndSaveCookies = async (userId, res) => {
     maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
   });
 
-  await User.findByIdAndUpdate(userId, { refreshToken });
+  if(category === "user") {
+    await User.findByIdAndUpdate(userId, { refreshToken });
+  } else if(category === "agent") {
+    await Agent.findByIdAndUpdate(userId, { refreshToken });
+  }
 
   return { accessToken, refreshToken};
 };

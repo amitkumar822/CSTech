@@ -53,7 +53,7 @@ export const loginUser = asyncHandler(async (req, res) => {
   }
 
   // Generate JWT Token
-  const token = await createTokensAndSaveCookies(user._id, res);
+  const token = await createTokensAndSaveCookies(user._id, res, "user");
 
   // Convert to plain object and remove password
   const userWithoutPassword = user.toObject();

@@ -53,21 +53,19 @@ export const loginAgent = asyncHandler(async (req, res) => {
   }
 
   // Generate JWT Token
-  const token = await createTokensAndSaveCookies(agent._id, res);
-  console.log(token);
-  
+  const token = await createTokensAndSaveCookies(agent._id, res,  "agent");
 
   // Convert to plain object and remove password
-  const AgentWithoutPassword = agent.toObject();
-  delete AgentWithoutPassword.password;
-  delete AgentWithoutPassword.refreshToken;
+  const agentWithoutPassword = agent.toObject();
+  delete agentWithoutPassword.password;
+  delete agentWithoutPassword.refreshToken;
 
   return res
     .status(200)
     .json(
       new ApiResponse(
         200,
-        { agent: AgentWithoutPassword, token },
+        { agent: agentWithoutPassword, token },
         "Agent Login Successfully"
       )
     );
