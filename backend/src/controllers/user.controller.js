@@ -13,13 +13,11 @@ import { User } from "../models/user.model.js";
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, mobile, password, role } = req.body;
 
-  // Check if user already exists
-  const existingUser = await User.findOne({ email });
+  const existingUser = await User.findOne({ email }).lean();
   if (existingUser) {
     throw new ApiError(400, "User already exists");
   }
 
-  // Create new user
   const user = new User({
     name,
     email,
@@ -79,14 +77,14 @@ export const loginUser = asyncHandler(async (req, res) => {
  * @access Public
  */
 export const logOut = asyncHandler(async (req, res) => {
-//   const { userId } = req.user;
+  //   const { userId } = req.user;
 
-//   // Remove refresh token from database
-//   await User.findByIdAndUpdate(
-//     userId,
-//     { $set: { refreshToken: "", token: "" } },
-//     { new: true }
-//   );
+  //   // Remove refresh token from database
+  //   await User.findByIdAndUpdate(
+  //     userId,
+  //     { $set: { refreshToken: "", token: "" } },
+  //     { new: true }
+  //   );
 
   res.clearCookie("accessToken", {
     httpOnly: true,
