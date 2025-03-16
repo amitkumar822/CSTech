@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import { Login } from "./pages/Login";
 
 const App = () => {
   return (
-    <div className='text-center py-2 bg-orange-400'>App</div>
-  )
-}
+    <div>
+      <Login />
+    </div>
+  );
+};
 
-export default App
+export default App;
