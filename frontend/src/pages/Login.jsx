@@ -11,6 +11,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Mail, Lock } from "lucide-react";
+import { useLoginUserMutation } from "../../redux/api/authUserApi";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 // Zod Schema for Validation
 const loginSchema = z.object({
@@ -28,9 +31,21 @@ export const Login = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const [loginUser, { isSuccess, error, isLoading }] = useLoginUserMutation();
+
+  const onSubmit = async (formInput) => {
+    loginUser(formInput);
   };
+
+  console.log(isSuccess, error, isLoading);
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(error?.data?.message || "Login Successfull");
+      reset();
+    } else if (error) {
+      toast.error(error?.data?.message || "Login failed");
+    }
+  }, [error, isSuccess]);
 
   return (
     <div>
