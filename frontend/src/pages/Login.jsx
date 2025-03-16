@@ -37,11 +37,10 @@ export const Login = () => {
     loginUser(formInput);
   };
 
-  console.log(isSuccess, error, isLoading);
   useEffect(() => {
     if (isSuccess) {
       toast.success(error?.data?.message || "Login Successfull");
-      reset();
+      // reset();
     } else if (error) {
       toast.error(error?.data?.message || "Login failed");
     }
