@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Mail, Lock } from "lucide-react";
-import { useLoginUserMutation } from "../../redux/api/authUserApi";
+import { useLoginUserMutation } from "../redux/api/authUserApi";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 

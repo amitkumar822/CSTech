@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { userLoggedOut } from "../../redux/authSlice"; // Update path if needed
+import { userLoggedOut } from "../redux/authSlice"; // Update path if needed
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
