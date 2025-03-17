@@ -2,26 +2,37 @@ import { useSelector, useDispatch } from "react-redux";
 import { userLoggedOut } from "../redux/authSlice"; // Update path if needed
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { Menu } from "lucide-react";
+import { Loader2, Menu } from "lucide-react";
+import { useLogoutUserMutation } from "@/redux/api/authUserApi";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log(user, isAuthenticated);
-  
+  const [logoutUser, { isSuccess, error, isLoading }] = useLogoutUserMutation();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await logoutUser();
     dispatch(userLoggedOut());
-    navigate("/login"); // Redirect to login page after logout
+    navigate("/login");
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(error?.data?.message || "Logout Successfull");
+    } else if (error) {
+      toast.error(error?.data?.message || "Logout failed");
+    }
+  }, [error, isSuccess]);
 
   return (
     <nav className="bg-blue-600 text-white py-3 px-5 flex justify-between items-center shadow-lg">
       {/* Brand Logo */}
       <Link to="/" className="text-xl font-bold">
-        MyApp
+        CSTech
       </Link>
 
       {/* Mobile Menu Icon */}
@@ -31,17 +42,21 @@ const Navbar = () => {
 
       {/* Desktop Menu */}
       <div className="hidden md:flex gap-4">
-        <Link to="/" className="hover:underline">Home</Link>
-        <Link to="/about" className="hover:underline">About</Link>
-        <Link to="/contact" className="hover:underline">Contact</Link>
-
         {/* Conditional Rendering for Login/Logout */}
         {isAuthenticated ? (
           <button
             onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg"
+            disabled={isLoading}
+            className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg cursor-pointer"
           >
-            Logout
+            {isLoading ? (
+              <span className="flex gap-2 justify-center items-center text-sm">
+                <Loader2 size={18} className="animate-spin" />
+                Plase Wait
+              </span>
+            ) : (
+              "Logout"
+            )}
           </button>
         ) : (
           <Link
