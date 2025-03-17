@@ -14,6 +14,7 @@ import { Mail, Lock } from "lucide-react";
 import { useLoginUserMutation } from "../redux/api/authUserApi";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 // Zod Schema for Validation
 const loginSchema = z.object({
@@ -22,6 +23,8 @@ const loginSchema = z.object({
 });
 
 export const Login = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -39,8 +42,9 @@ export const Login = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      navigate("/dashboard", { replace: true });
       toast.success(error?.data?.message || "Login Successfull");
-      // reset();
+      reset();
     } else if (error) {
       toast.error(error?.data?.message || "Login failed");
     }
