@@ -5,6 +5,7 @@ const baseUrl = "http://localhost:4000/api/v1/users";
 
 export const authUserApi = createApi({
   reducerPath: "authUserApi",
+  tagTypes: ["Refresh_Agent"],
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
     credentials: "include",
@@ -52,6 +53,24 @@ export const authUserApi = createApi({
         }
       },
     }),
+
+    //^ Agent API methods
+    getAllAgents: builder.query({
+      query: () => ({
+        url: "/get-all-agents",
+        method: "GET",
+      }),
+      // refetchOnMountOrRefresh: true,
+      providesTags: ["Refresh_Agent"],
+    }),
+
+    deleteAgent: builder.mutation({
+      query: (deleteAgentId) => ({
+        url: `/delete/${deleteAgentId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Refresh_Agent"],
+    })
   }),
 });
 
@@ -59,4 +78,8 @@ export const {
   useRegisterUserMutation,
   useLoginUserMutation,
   useLogoutUserMutation,
+
+  //^ Agent API methods
+  useGetAllAgentsQuery,
+  useDeleteAgentMutation,
 } = authUserApi;

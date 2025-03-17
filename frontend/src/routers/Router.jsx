@@ -1,6 +1,7 @@
 import App from "@/App";
 import { AddAgent } from "@/pages/dashboard/AddAgent";
 import Dashboard from "@/pages/dashboard/Dashboard";
+import ManageAgents from "@/pages/dashboard/ManageAgents";
 import { Login } from "@/pages/Login";
 import {
   createBrowserRouter,
@@ -12,14 +13,15 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route path="/login" element={<Login />} />
-      
+
       {/* Dashboard Layout with Nested Routes */}
       <Route path="dashboard" element={<Dashboard />}>
+        {/* Dashboard default display */}
+        <Route index element={<ManageAgents />} />
         {/* Agent Routes */}
         <Route path="agents">
           <Route path="add" element={<AddAgent />} />
-          {/* <Route index element={<ManageAgents />} />{" "} */}
-          {/* <Route path="manage" element={<ManageAgents />} /> */}
+          <Route path="manage" element={<ManageAgents />} />
         </Route>
 
         {/* User Routes */}

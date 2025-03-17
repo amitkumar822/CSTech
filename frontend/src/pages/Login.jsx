@@ -35,12 +35,12 @@ export const Login = () => {
   });
 
   // Login API Call
-  const [loginUser, {data, isSuccess, error, isLoading }] = useLoginUserMutation();
+  const [loginUser, { data, isSuccess, error, isLoading }] =
+    useLoginUserMutation();
 
   const onSubmit = async (formInput) => {
     loginUser(formInput);
   };
-  
 
   useEffect(() => {
     if (isSuccess) {

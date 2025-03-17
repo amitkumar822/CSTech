@@ -120,3 +120,35 @@ export const updateUser = asyncHandler(async (req, res) => {
     new ApiResponse(200, updatedUser, "User profile updated successfully")
   );
 });
+
+/**
+ * @desc Delete User
+ * @route DELETE delete/:userId
+ * @access Private (Admin)
+ */
+export const deleteUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const deletedUser = await User.findByIdAndDelete(id);
+  if (!deletedUser) {
+    throw new ApiError(404, "User or Agent not found");
+  }
+
+  res.json(
+    new ApiResponse(200, deletedUser, "User or Agent deleted successfully")
+  );
+});
+
+/**
+ * @desc Get All Agents
+ * @route GET /get-all-agents
+ * @access Private (Admin)
+ */
+export const getAllAgents = asyncHandler(async (_, res) => {
+  const agents = await User.find({ role: "agent" }).select("-password").lean();
+  if (!agents) {
+    throw new ApiError(404, "No agents found");
+  }
+
+  res.json(new ApiResponse(200, agents, "All Agents fetched successfully"));
+});
