@@ -18,11 +18,9 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 
 // import all routes from here
 import userRouter from "./src/routes/user.routes.js";
-import agentRouter from "./src/routes/agent.routes.js";
 
 // fees all import routes
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/agents", agentRouter);
 
 app.use(errorHandler);
 export { app };
