@@ -4,8 +4,10 @@ import * as z from "zod";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { toast } from "react-hot-toast";
-import { Mail, Lock, User, Phone } from "lucide-react";
+import { toast } from "react-toastify";
+import { Mail, Lock, User, Phone, Loader2 } from "lucide-react";
+import { useRegisterUserMutation } from "@/redux/api/authUserApi";
+import { useEffect } from "react";
 
 // Schema validation
 const agentSchema = z
@@ -13,10 +15,10 @@ const agentSchema = z
     name: z.string().min(2, "Name must be at least 2 characters"),
     email: z.string().email("Invalid email address"),
     mobile: z.string().regex(/^\+\d{1,3}\d{7,15}$/, "Invalid mobile number"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    password: z.string().min(4, "Password must be at least 4 characters"),
     confirmpassword: z
       .string()
-      .min(6, "Confirm Password must be at least 6 characters"),
+      .min(4, "Confirm Password must be at least 4 characters"),
   })
   .refine((data) => data.password === data.confirmpassword, {
     message: "Passwords do not match",
@@ -27,13 +29,28 @@ export const AddAgent = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({ resolver: zodResolver(agentSchema) });
 
-  const onSubmit = (data) => {
-    console.log(data);
-    toast.success("Agent added successfully!");
+  // Login API Call
+  const [registerUser, { data, isSuccess, error, isLoading }] =
+    useRegisterUserMutation();
+
+  const onSubmit = async (formInput) => {
+    await registerUser(formInput);
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(
+        data?.message || "Agent successfully created and added to the system"
+      );
+      // reset();
+    } else if (error) {
+      alert(error?.data?.message || "Please try again");
+    }
+  }, [error, isSuccess]);
 
   return (
     <div className="w-full">
@@ -45,13 +62,7 @@ export const AddAgent = () => {
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               {fields.map(
-                ({
-                  name,
-                  icon: Icon,
-                  type,
-                  placeholder,
-                  autoComplete,
-                }) => (
+                ({ name, icon: Icon, type, placeholder, autoComplete }) => (
                   <div key={name}>
                     <div className="flex items-center border rounded-lg px-3 py-2 bg-gray-50">
                       <Icon className="text-gray-400 mr-2" size={18} />
@@ -70,8 +81,19 @@ export const AddAgent = () => {
                   </div>
                 )
               )}
-              <Button type="submit" className="w-full">
-                Add Agent
+              <Button
+                disabled={isLoading}
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 duration-300 ease-in-out cursor-pointer"
+              >
+                {isLoading ? (
+                  <span className="flex gap-2 items-center justify-center">
+                    <Loader2 className="animate-spin" />
+                    Processing...
+                  </span>
+                ) : (
+                  "Submit"
+                )}
               </Button>
             </form>
           </CardContent>

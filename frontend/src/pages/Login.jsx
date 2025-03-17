@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, Loader2 } from "lucide-react";
 import { useLoginUserMutation } from "../redux/api/authUserApi";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -34,16 +34,18 @@ export const Login = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const [loginUser, { isSuccess, error, isLoading }] = useLoginUserMutation();
+  // Login API Call
+  const [loginUser, {data, isSuccess, error, isLoading }] = useLoginUserMutation();
 
   const onSubmit = async (formInput) => {
     loginUser(formInput);
   };
+  
 
   useEffect(() => {
     if (isSuccess) {
       navigate("/dashboard", { replace: true });
-      toast.success(error?.data?.message || "Login Successfull");
+      toast.success(data?.message || "Login Successfull");
       reset();
     } else if (error) {
       toast.error(error?.data?.message || "Login failed");
@@ -88,10 +90,18 @@ export const Login = () => {
 
               <CardFooter className="flex justify-end">
                 <Button
+                  disabled={isLoading}
                   type="submit"
-                  className="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 duration-300"
+                  className="w-full bg-blue-600 hover:bg-blue-700 duration-300 ease-in-out cursor-pointer"
                 >
-                  Login
+                  {isLoading ? (
+                    <span className="flex gap-2 items-center justify-center">
+                      <Loader2 className="animate-spin" />
+                      Processing...
+                    </span>
+                  ) : (
+                    "Submit"
+                  )}
                 </Button>
               </CardFooter>
             </form>

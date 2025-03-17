@@ -1,4 +1,3 @@
-import { Agent } from "../models/agent.model.js";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
@@ -32,13 +31,9 @@ const createTokensAndSaveCookies = async (userId, res, category) => {
     maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
   });
 
-  if(category === "user") {
-    await User.findByIdAndUpdate(userId, { refreshToken });
-  } else if(category === "agent") {
-    await Agent.findByIdAndUpdate(userId, { refreshToken });
-  }
+  await User.findByIdAndUpdate(userId, { refreshToken });
 
-  return { accessToken, refreshToken};
+  return { accessToken, refreshToken };
 };
 
 export default createTokensAndSaveCookies;
