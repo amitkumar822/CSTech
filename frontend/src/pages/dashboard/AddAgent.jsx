@@ -6,8 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import { Mail, Lock, User, Phone, Loader2 } from "lucide-react";
-import { useRegisterUserMutation } from "@/redux/api/authUserApi";
+import {
+  useRegisterUserMutation,
+  useUpdateUserOrAgentMutation,
+} from "@/redux/api/authUserApi";
 import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router";
 
 // Schema validation
 const agentSchema = z
@@ -26,78 +30,172 @@ const agentSchema = z
   });
 
 export const AddAgent = () => {
+  const navigate = useNavigate();
+  const location = useLocation(); // Get state from navigation
+  const agentToEdit = location.state?.agent || null; // Check if editing
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(agentSchema) });
+  } = useForm({
+    defaultValues: agentToEdit || {
+      name: "",
+      email: "",
+      mobile: "",
+      password: "",
+      confirmpassword: "",
+    },
+  });
 
-  // Login API Call
   const [registerUser, { data, isSuccess, error, isLoading }] =
     useRegisterUserMutation();
 
+  //^Agent Update or Edit API Call
+  const [
+    updateUserOrAgent,
+    {
+      data: updatedData,
+      isSuccess: isUpdateSuccess,
+      error: updateError,
+      isLoading: isUpdateLoading,
+    },
+  ] = useUpdateUserOrAgentMutation();
+
   const onSubmit = async (formInput) => {
-    await registerUser(formInput);
+    if (agentToEdit) {
+      // update an existing agent
+      const agentId = agentToEdit._id;
+      const editFormInput = {
+        name: formInput.name,
+        email: formInput.email,
+        mobile: formInput.mobile,
+      };
+      await updateUserOrAgent({ editFormInput, agentId });
+    } else {
+      // create a new agent
+      await registerUser(formInput);
+    }
   };
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess || isUpdateSuccess) {
       toast.success(
-        data?.message || "Agent successfully created and added to the system"
+        data?.message ||
+        updatedData?.message ||
+          "Agent successfully created and added to the system"
       );
-      // reset();
-    } else if (error) {
-      alert(error?.data?.message || "Please try again");
+      reset();
+      if (isUpdateSuccess) {
+        navigate("/dashboard/agents/manage");
+      }
+    } else if (error || updateError) {
+      alert(
+        error?.data?.message || updateError?.data?.message || "Please try again"
+      );
     }
-  }, [error, isSuccess]);
+  }, [error, isSuccess, isUpdateSuccess, updateError]);
+
+  //^ set edit agent data in form input
+  useEffect(() => {
+    if (agentToEdit) {
+      reset(agentToEdit);
+    }
+  }, [agentToEdit, reset]);
 
   return (
-    <div className="w-full">
-      <div className="w-full max-w-5xl mx-auto p-4">
-        <Card className="shadow-lg">
-          <CardHeader>
-            <CardTitle className="text-center text-lg">Add Agent</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              {fields.map(
-                ({ name, icon: Icon, type, placeholder, autoComplete }) => (
-                  <div key={name}>
-                    <div className="flex items-center border rounded-lg px-3 py-2 bg-gray-50">
-                      <Icon className="text-gray-400 mr-2" size={18} />
-                      <Input
-                        type={type}
-                        placeholder={placeholder}
-                        autoComplete={autoComplete}
-                        {...register(name)}
-                      />
-                    </div>
-                    {errors[name] && (
-                      <p className="text-red-500 text-sm">
-                        {errors[name]?.message}
-                      </p>
-                    )}
-                  </div>
-                )
-              )}
-              <Button
-                disabled={isLoading}
-                type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 duration-300 ease-in-out cursor-pointer"
-              >
-                {isLoading ? (
-                  <span className="flex gap-2 items-center justify-center">
-                    <Loader2 className="animate-spin" />
-                    Processing...
-                  </span>
-                ) : (
-                  "Submit"
+    <div className="w-full max-w-5xl mx-auto p-4">
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <h2 className="text-xl font-semibold mb-4">
+          {agentToEdit ? "Edit Agent" : "Add Agent"}
+        </h2>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <div className="flex items-center border rounded-lg px-3 py-2 bg-gray-50">
+              <User className="text-gray-400 mr-2" size={18} />
+              <Input
+                type="text"
+                placeholder="Enter agent's name"
+                {...register("name")}
+              />
+            </div>
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name.message}</p>
+            )}
+          </div>
+
+          <div>
+            <div className="flex items-center border rounded-lg px-3 py-2 bg-gray-50">
+              <Mail className="text-gray-400 mr-2" size={18} />
+              <Input
+                type="email"
+                placeholder="Enter agent's email"
+                {...register("email")}
+              />
+            </div>
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email.message}</p>
+            )}
+          </div>
+
+          <div>
+            <div className="flex items-center border rounded-lg px-3 py-2 bg-gray-50">
+              <Phone className="text-gray-400 mr-2" size={18} />
+              <Input
+                type="text"
+                placeholder="Ex. +91xxxxxxxx86"
+                {...register("mobile")}
+              />
+            </div>
+            {errors.mobile && (
+              <p className="text-red-500 text-sm">{errors.mobile.message}</p>
+            )}
+          </div>
+
+          {!agentToEdit && (
+            <>
+              <div>
+                <div className="flex items-center border rounded-lg px-3 py-2 bg-gray-50">
+                  <Lock className="text-gray-400 mr-2" size={18} />
+                  <Input
+                    type="password"
+                    placeholder="Enter password"
+                    {...register("password")}
+                  />
+                </div>
+                {errors.password && (
+                  <p className="text-red-500 text-sm">
+                    {errors.password.message}
+                  </p>
                 )}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+              </div>
+
+              <div>
+                <div className="flex items-center border rounded-lg px-3 py-2 bg-gray-50">
+                  <Lock className="text-gray-400 mr-2" size={18} />
+                  <Input
+                    type="password"
+                    placeholder="Enter confirm password"
+                    {...register("confirmpassword")}
+                  />
+                </div>
+                {errors.confirmpassword && (
+                  <p className="text-red-500 text-sm">
+                    {errors.confirmpassword.message}
+                  </p>
+                )}
+              </div>
+            </>
+          )}
+
+          <Button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700"
+          >
+            {agentToEdit ? "Update Agent" : "Add Agent"}
+          </Button>
+        </form>
       </div>
     </div>
   );

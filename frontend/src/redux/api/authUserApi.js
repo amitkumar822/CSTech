@@ -54,6 +54,15 @@ export const authUserApi = createApi({
       },
     }),
 
+    updateUserOrAgent: builder.mutation({
+      query: ({editFormInput, agentId}) => ({
+        url: `/update/${agentId}`,
+        method: "PUT",
+        body: editFormInput,
+      }),
+      invalidatesTags: ["Refresh_Agent"],
+    }),
+
     //^ Agent API methods
     getAllAgents: builder.query({
       query: () => ({
@@ -70,7 +79,7 @@ export const authUserApi = createApi({
         method: "DELETE",
       }),
       invalidatesTags: ["Refresh_Agent"],
-    })
+    }),
   }),
 });
 
@@ -78,6 +87,7 @@ export const {
   useRegisterUserMutation,
   useLoginUserMutation,
   useLogoutUserMutation,
+  useUpdateUserOrAgentMutation,
 
   //^ Agent API methods
   useGetAllAgentsQuery,

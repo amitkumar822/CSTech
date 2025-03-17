@@ -108,6 +108,7 @@ export const logOut = asyncHandler(async (req, res) => {
  */
 export const updateUser = asyncHandler(async (req, res) => {
   const { userId } = req.params;
+
   const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
     new: true,
     runValidators: true,

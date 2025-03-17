@@ -6,7 +6,7 @@ const router = Router();
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/logout", logOut);
-router.post("/update/:userId", updateUser);
+router.put("/update/:userId", updateUser);
 
 //^ Agent routes
 router.get("/get-all-agents", getAllAgents);

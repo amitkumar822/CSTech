@@ -15,28 +15,7 @@ import {
 } from "@/redux/api/authUserApi";
 import DeleteClassModal from "@/components/DeleteClassModal";
 import { toast } from "react-toastify";
-
-// Sample agent data
-const initialAgents = [
-  {
-    id: 1,
-    name: "John Doe",
-    email: "john@example.com",
-    mobile: "+1 123-456-7890",
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    email: "jane@example.com",
-    mobile: "+44 987-654-3210",
-  },
-  {
-    id: 3,
-    name: "Michael Brown",
-    email: "michael@example.com",
-    mobile: "+91 876-543-2109",
-  },
-];
+import { useNavigate } from "react-router";
 
 export default function ManageAgents() {
   // Fetch all agents
@@ -62,6 +41,12 @@ export default function ManageAgents() {
       toast.error(error?.data?.message || "Delete failed");
     }
   }, [error, isSuccess]);
+
+  //^ Edit Agent and send data on add agent form help of navigation
+  const navigate = useNavigate();
+  const handleEdit = (agent) => {
+    navigate("/dashboard/agents/add", { state: { agent } }); // Pass data via state
+  };
 
   return (
     <div className="p-6">
@@ -110,7 +95,11 @@ export default function ManageAgents() {
                     })}
                   </TableCell>
                   <TableCell className="flex gap-2 justify-center">
-                    <Button variant="outline" size="sm">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEdit(agent)}
+                    >
                       <Pencil className="w-4 h-4" />
                     </Button>
                     <Button
