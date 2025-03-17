@@ -11,7 +11,7 @@ import { User } from "../models/user.model.js";
  * @access Public
  */
 export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, mobile, password, role } = req.body;
+  const { name, email, mobile, password } = req.body;
 
   const existingUser = await User.findOne({ email }).lean();
   if (existingUser) {
@@ -23,7 +23,6 @@ export const registerUser = asyncHandler(async (req, res) => {
     email,
     mobile,
     password,
-    role,
   });
 
   // Save user to database
