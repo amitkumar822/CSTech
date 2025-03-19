@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { userLoggedIn } from "../authSlice";
+import { apiUrl } from "../mainApi";
 
-const baseUrl = "https://cstech-backend-api.onrender.com/api/v1/users";
-// const baseUrl = "http://localhost:4000/api/v1/users";
+const baseUrl = `${apiUrl}/users`;
 
 export const authUserApi = createApi({
   reducerPath: "authUserApi",
@@ -10,6 +10,7 @@ export const authUserApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
     credentials: "include",
+    withCredentials: true,
   }),
   endpoints: (builder) => ({
     registerUser: builder.mutation({

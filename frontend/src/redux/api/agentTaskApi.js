@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { apiUrl } from "../mainApi";
 
-const baseUrl = "https://cstech-backend-api.onrender.com/api/v1/agent";
-// const baseUrl = "http://localhost:4000/api/v1/agent";
+const baseUrl = `${apiUrl}/agent`;
 
 export const agentTaskApi = createApi({
   reducerPath: "agentTaskApi",
@@ -9,6 +9,7 @@ export const agentTaskApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
     credentials: "include",
+    withCredentials: true,
   }),
   endpoints: (builder) => ({
     uploadTask: builder.mutation({
