@@ -1,15 +1,23 @@
 import { Router } from "express";
-import { deleteUser, getAllAgents, loginUser, logOut, registerUser, updateUser } from "../controllers/user.controller.js";
+import {
+  deleteUser,
+  getAllAgents,
+  loginUser,
+  logOut,
+  registerUser,
+  updateUser,
+} from "../controllers/user.controller.js";
+import { isAdminAuth, isUserLoggedIn } from "../middlewares/auth.js";
 
 const router = Router();
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.post("/logout", logOut);
+router.post("/logout", isUserLoggedIn, logOut);
 router.put("/update/:userId", updateUser);
 
 //^ Agent routes
-router.get("/get-all-agents", getAllAgents);
-router.delete("/delete/:id", deleteUser);
+router.get("/get-all-agents", isAdminAuth, getAllAgents);
+router.delete("/delete/:id", isAdminAuth, deleteUser);
 
 export default router;

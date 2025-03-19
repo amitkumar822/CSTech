@@ -76,21 +76,16 @@ export const loginUser = asyncHandler(async (req, res) => {
  * @access Public
  */
 export const logOut = asyncHandler(async (req, res) => {
-  //   const { userId } = req.user;
+  const { userId } = req;
 
-  //   // Remove refresh token from database
-  //   await User.findByIdAndUpdate(
-  //     userId,
-  //     { $set: { refreshToken: "", token: "" } },
-  //     { new: true }
-  //   );
+  // Remove refresh token from database
+  await User.findByIdAndUpdate(
+    userId,
+    { $set: { jwtToken: "" } },
+    { new: true }
+  );
 
-  res.clearCookie("accessToken", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "strict",
-  });
-  res.clearCookie("refreshToken", {
+  res.clearCookie("jwtToken", {
     httpOnly: true,
     secure: true,
     sameSite: "strict",

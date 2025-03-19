@@ -2,25 +2,25 @@ import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
 const createTokensAndSaveCookies = async (userId, res) => {
-  // Generate Refresh Token
-  const refreshToken = jwt.sign(
+  // Generate Jwt Token
+  const jwtToken = jwt.sign(
     { userId },
-    process.env.JWT_REFRESH_SECRET_KEY,
+    process.env.JWT_SECRET_KEY,
     {
-      expiresIn: process.env.JWT_REFRESH_EXPIRES,
+      expiresIn: process.env.JWT_EXPIRES,
     }
   );
 
-  res.cookie("refreshToken", refreshToken, {
+  res.cookie("jwtToken", jwtToken, {
     httpOnly: true,
     secure: true,
     sameSite: "strict",
     maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
   });
 
-  await User.findByIdAndUpdate(userId, { refreshToken });
+  await User.findByIdAndUpdate(userId, { jwtToken });
 
-  return { refreshToken };
+  return { jwtToken };
 };
 
 export default createTokensAndSaveCookies;
