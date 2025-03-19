@@ -16,15 +16,16 @@ import {
 import DeleteClassModal from "@/components/DeleteClassModal";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import Loading from "@/components/Loading";
 
 export default function ManageAgents() {
   // Fetch all agents
-  const { data: agents } = useGetAllAgentsQuery();
+  const { data: agents, isLoading } = useGetAllAgentsQuery();
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteAgentId, setDeleteAgentId] = useState("");
 
-  const [deleteAgent, { data, error, isLoading, isSuccess }] =
+  const [deleteAgent, { data, error, isLoading: deleteIsLoading, isSuccess }] =
     useDeleteAgentMutation();
 
   // Delete agent function
@@ -53,77 +54,81 @@ export default function ManageAgents() {
       <h2 className="text-2xl font-semibold mb-4">Manage Agents</h2>
 
       <div className="overflow-auto bg-white rounded-lg shadow-md">
-        <Table className="min-w-full">
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-10">Sr. No.</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Mobile</TableHead>
-              <TableHead>Joining Date</TableHead>
-              <TableHead className="w-32 text-center">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <Table className="min-w-full">
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-10">Sr. No.</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Mobile</TableHead>
+                <TableHead>Joining Date</TableHead>
+                <TableHead className="w-32 text-center">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
 
-          <TableBody>
-            {agents?.data?.length > 0 ? (
-              agents?.data.map((agent, index) => (
-                <TableRow key={agent.id}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{agent.name}</TableCell>
-                  <TableCell>
-                    <a
-                      href={`mailto:${agent.email}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      {agent.email}
-                    </a>
-                  </TableCell>
-                  <TableCell>
-                    <a
-                      href={`tel:${agent.mobile.replace(/\s+/g, "")}`}
-                      className="text-green-600 hover:underline"
-                    >
-                      {agent.mobile}
-                    </a>
-                  </TableCell>
-                  <TableCell>
-                    {new Date(agent.createdAt).toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </TableCell>
-                  <TableCell className="flex gap-2 justify-center">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEdit(agent)}
-                    >
-                      <Pencil className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => {
-                        setDeleteModalOpen(true);
-                        setDeleteAgentId(agent._id);
-                      }}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+            <TableBody>
+              {agents?.length > 0 ? (
+                agents?.map((agent, index) => (
+                  <TableRow key={agent._id}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{agent.name}</TableCell>
+                    <TableCell>
+                      <a
+                        href={`mailto:${agent.email}`}
+                        className="text-blue-600 hover:underline"
+                      >
+                        {agent.email}
+                      </a>
+                    </TableCell>
+                    <TableCell>
+                      <a
+                        href={`tel:${agent.mobile.replace(/\s+/g, "")}`}
+                        className="text-green-600 hover:underline"
+                      >
+                        {agent.mobile}
+                      </a>
+                    </TableCell>
+                    <TableCell>
+                      {new Date(agent.createdAt).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </TableCell>
+                    <TableCell className="flex gap-2 justify-center">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEdit(agent)}
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => {
+                          setDeleteModalOpen(true);
+                          setDeleteAgentId(agent._id);
+                        }}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-4">
+                    No agents found.
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={5} className="text-center py-4">
-                  No agents found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              )}
+            </TableBody>
+          </Table>
+        )}
       </div>
 
       {/* Agent Delete Model */}
@@ -133,7 +138,7 @@ export default function ManageAgents() {
           onClose={() => setDeleteModalOpen(false)}
           onConfirm={handleDelete}
           message={"Agent"}
-          isPending={isLoading}
+          isPending={deleteIsLoading}
         />
       </div>
     </div>

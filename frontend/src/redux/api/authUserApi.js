@@ -69,8 +69,8 @@ export const authUserApi = createApi({
         url: "/get-all-agents",
         method: "GET",
       }),
-      // refetchOnMountOrRefresh: true,
       providesTags: ["Refresh_Agent"],
+      transformResponse: (response) => response.data,
     }),
 
     deleteAgent: builder.mutation({
