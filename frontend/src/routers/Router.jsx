@@ -13,6 +13,7 @@ import {
 import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
 import AgentDashboard from "@/pages/agent/AgentDashboard";
+import UploadTaskPage from "@/pages/dashboard/UploadTaskPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,7 +28,7 @@ const router = createBrowserRouter(
       {/* ✅ Protect Dashboard Route (Only Admin Can Access) */}
       <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
         <Route path="dashboard" element={<Dashboard />}>
-          <Route index element={<ManageAgents />} />
+          <Route index element={<UploadTaskPage />} />
           <Route path="agents">
             <Route path="add" element={<AddAgent />} />
             <Route path="manage" element={<ManageAgents />} />

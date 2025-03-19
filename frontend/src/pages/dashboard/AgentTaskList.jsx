@@ -10,7 +10,11 @@ import {
 import { useGetAllAgentTasksQuery } from "@/redux/api/agentTaskApi";
 import Loading from "@/components/Loading";
 import { Badge, CheckCircle, XCircle } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function AgentTaskList() {
   const { data: tasks, isLoading } = useGetAllAgentTasksQuery();
@@ -27,7 +31,7 @@ export default function AgentTaskList() {
           <Card key={agent._id} className="shadow-lg">
             <CardHeader>
               <CardTitle className="text-lg font-semibold">
-                {agent.name}
+                {agent.name} ({tasks?.length})
               </CardTitle>
               <p className="md:text-sm text-xs flex md:gap-4 gap-1">
                 <a
@@ -77,7 +81,10 @@ export default function AgentTaskList() {
                                 size={20}
                               />
                             ) : (
-                              <XCircle className="text-red-500 cursor-pointer" size={20} />
+                              <XCircle
+                                className="text-red-500 cursor-pointer"
+                                size={20}
+                              />
                             )}
                           </TooltipTrigger>
                           <TooltipContent>

@@ -34,14 +34,14 @@ const DeskTopSidebar = () => {
       {/* Sidebar Header */}
       <div className="p-4 flex items-center justify-between border-b border-gray-700">
         {!isCollapsed && (
-          <div className="flex items-center gap-2">
+          <Link to="/dashboard" className="flex items-center gap-2">
             <Briefcase className="w-6 h-6 text-blue-500" />
             <h1 className="text-lg font-bold">
               <span className="text-blue-600">CS</span>
               <span className="text-green-500">Tech</span>
               <span className="text-gray-800"> Admin Hub</span>
             </h1>
-          </div>
+          </Link>
         )}
         <button
           onClick={toggleSidebar}

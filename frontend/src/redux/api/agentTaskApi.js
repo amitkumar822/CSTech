@@ -10,6 +10,15 @@ export const agentTaskApi = createApi({
     credentials: "include",
   }),
   endpoints: (builder) => ({
+    uploadTask: builder.mutation({
+      query: (formData) => ({
+        url: "/upload",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["Refresh_Tasks"],
+      transformResponse: (response) => response.data,
+    }),
     getAllAgentTasks: builder.query({
       query: () => ({
         url: "/get-all-tasks",
@@ -37,9 +46,9 @@ export const agentTaskApi = createApi({
   }),
 });
 
-export const { 
+export const {
+  useUploadTaskMutation,
   useGetAllAgentTasksQuery,
-  // useGetAgentTaskByIdMutation,
   useGetAgentTaskByIdQuery,
   useMarkTaskAsCompletedMutation,
 } = agentTaskApi;
