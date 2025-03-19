@@ -95,7 +95,7 @@ export const getTaskDistribution = asyncHandler(async (_, res) => {
 
 /**
  * @desc Mark Task as Completed
- * @route PUT /task-complete/:taskId
+ * @route PUT /mark-task-as-completed/:taskId
  * @access Private
  */
 export const completeTask = asyncHandler(async (req, res) => {
@@ -113,7 +113,45 @@ export const completeTask = asyncHandler(async (req, res) => {
 
   res
     .status(200)
-    .json(new ApiResponse(200, updatedTask, "Task status updated successfully"));
+    .json(
+      new ApiResponse(200, updatedTask, "Task status updated successfully")
+    );
 });
 
+/**
+ * @desc Delete Task
+ * @route DELETE /task-delete/:taskId
+ * @access Private
+ */
+export const deleteTask = asyncHandler(async (req, res) => {
+  const { taskId } = req.params;
 
+  const deletedTask = await AgentTask.findByIdAndDelete(taskId);
+
+  if (!deletedTask) {
+    throw new ApiError(404, "Task not found");
+  }
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, deletedTask, "Task deleted successfully"));
+});
+
+/**
+ * @desc Get Agent Task by ID
+ * @route GET /get-task-by-id/:agentId
+ * @access Private
+ */
+export const getAgentTaskById = asyncHandler(async (req, res) => {
+  const { agentId } = req.params;
+
+  const task = await AgentTask.find({ agentId: agentId })
+    .select("-agentId")
+    .lean();
+
+  if (!task) {
+    throw new ApiError(404, "Task not found");
+  }
+
+  res.json(new ApiResponse(200, task, "Task fetched successfully"));
+});
