@@ -1,4 +1,3 @@
-import UploadCSV from "@/components/UploadCSV";
 import Sidebar from "./Sidebar";
 import { Outlet } from "react-router";
 
@@ -10,8 +9,7 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-scroll pb-15">
-        {/* <Outlet /> */}
-        <UploadCSV />
+        <Outlet />
       </div>
     </div>
   );

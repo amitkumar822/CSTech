@@ -1,5 +1,6 @@
 import App from "@/App";
 import { AddAgent } from "@/pages/dashboard/AddAgent";
+import AgentTaskList from "@/pages/dashboard/AgentTaskList";
 import Dashboard from "@/pages/dashboard/Dashboard";
 import ManageAgents from "@/pages/dashboard/ManageAgents";
 import { Login } from "@/pages/Login";
@@ -22,6 +23,7 @@ const router = createBrowserRouter(
         <Route path="agents">
           <Route path="add" element={<AddAgent />} />
           <Route path="manage" element={<ManageAgents />} />
+          <Route path="tasks" element={<AgentTaskList />} />
         </Route>
 
         {/* User Routes */}

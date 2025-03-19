@@ -6,6 +6,7 @@ import {
   User,
   UserPlus,
   ClipboardList,
+  ListChecks,
 } from "lucide-react";
 import { Link, NavLink } from "react-router";
 
@@ -103,23 +104,28 @@ export const sidebarData = [
         icon: <ClipboardList className="w-4 h-4" />,
         link: "/dashboard/agents/manage",
       },
+      {
+        title: "Agent Tasks",
+        icon: <ListChecks className="w-4 h-4" />,
+        link: "/dashboard/agents/tasks",
+      }
     ],
   },
-  {
-    title: "Users",
-    icon: <Users className="w-5 h-5" />,
-    link: "/dashboard/users",
-    subItems: [
-      {
-        title: "Add User",
-        icon: <UserPlus className="w-4 h-4" />,
-        link: "/dashboard/users/add",
-      },
-      {
-        title: "Manage Users",
-        icon: <ClipboardList className="w-4 h-4" />,
-        link: "/dashboard/users/manage",
-      },
-    ],
-  },
+  // {
+  //   title: "Users",
+  //   icon: <Users className="w-5 h-5" />,
+  //   link: "/dashboard/users",
+  //   subItems: [
+  //     {
+  //       title: "Add User",
+  //       icon: <UserPlus className="w-4 h-4" />,
+  //       link: "/dashboard/users/add",
+  //     },
+  //     {
+  //       title: "Manage Users",
+  //       icon: <ClipboardList className="w-4 h-4" />,
+  //       link: "/dashboard/users/manage",
+  //     },
+  //   ],
+  // },
 ];
