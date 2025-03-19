@@ -1,4 +1,3 @@
-import fs from "fs";
 import AgentTask from "../../models/agentTask.model.js";
 import { asyncHandler } from "../../../utils/asyncHandler.js";
 import { ApiError } from "../../../utils/ApiError.js";
@@ -11,6 +10,7 @@ import {
 
 /**
  * @desc Upload Agent Tasks
+ * @mainRoute /api/v1/agent
  * @route POST /upload
  * @access Private
  */
@@ -29,13 +29,7 @@ export const uploadTaskFile = asyncHandler(async (req, res) => {
   }
 
   const assignedTasks = await distributeTasks(records);
-  // ✅ Delete file after processing
-  const filePath = req?.file?.path;
-  // console.log(filePath);
-  
-  // fs.unlinkSync(filePath);
 
-  // ✅ Send response
   res
     .status(200)
     .json(new ApiResponse(200, assignedTasks, "Tasks uploaded successfully"));
@@ -79,6 +73,7 @@ export const getTaskDistribution = asyncHandler(async (_, res) => {
       firstName: task.firstName,
       phone: task.phone,
       notes: task.notes,
+      completed: task.completed,
     });
 
     return acc;
@@ -97,3 +92,28 @@ export const getTaskDistribution = asyncHandler(async (_, res) => {
       )
     );
 });
+
+/**
+ * @desc Mark Task as Completed
+ * @route PUT /task-complete/:taskId
+ * @access Private
+ */
+export const completeTask = asyncHandler(async (req, res) => {
+  const { taskId } = req.params;
+
+  const updatedTask = await AgentTask.findByIdAndUpdate(
+    taskId,
+    [{ $set: { completed: { $not: "$completed" } } }], // ✅ Atomic toggle
+    { new: true }
+  );
+
+  if (!updatedTask) {
+    throw new ApiError(404, "Task not found");
+  }
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, updatedTask, "Task status updated successfully"));
+});
+
+

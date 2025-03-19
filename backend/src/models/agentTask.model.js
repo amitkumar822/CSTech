@@ -18,6 +18,10 @@ const AgentTaskSchema = new mongoose.Schema({
     ref: "User",
     required: [true, "Agent ID is required"],
   },
+  completed: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const AgentTask = mongoose.model("AgentTask", AgentTaskSchema);

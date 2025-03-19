@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/table";
 import { useGetAllAgentTasksQuery } from "@/redux/api/agentTaskApi";
 import Loading from "@/components/Loading";
+import { Badge, CheckCircle, XCircle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function AgentTaskList() {
   const { data: tasks, isLoading } = useGetAllAgentTasksQuery();
@@ -50,6 +52,7 @@ export default function AgentTaskList() {
                     <TableHead>Name</TableHead>
                     <TableHead>Phone</TableHead>
                     <TableHead>Notes</TableHead>
+                    <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -65,6 +68,25 @@ export default function AgentTaskList() {
                         </a>
                       </TableCell>
                       <TableCell>{task.notes}</TableCell>
+                      <TableCell className="flex items-center gap-2">
+                        <Tooltip>
+                          <TooltipTrigger>
+                            {task.completed ? (
+                              <CheckCircle
+                                className="text-green-600 cursor-pointer"
+                                size={20}
+                              />
+                            ) : (
+                              <XCircle className="text-red-500 cursor-pointer" size={20} />
+                            )}
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {task.completed
+                              ? "Task Completed"
+                              : "Task Not Completed"}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
