@@ -1,36 +1,14 @@
 import { useSelector, useDispatch } from "react-redux";
-import { userLoggedOut } from "../redux/authSlice"; // Update path if needed
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { Loader2, Menu } from "lucide-react";
-import { useLogoutUserMutation } from "@/redux/api/authUserApi";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
 import Logout from "./Logout";
 
 const Navbar = () => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const [logoutUser, { isSuccess, error, isLoading }] = useLogoutUserMutation();
-
-  const handleLogout = async () => {
-    await logoutUser();
-    dispatch(userLoggedOut());
-    navigate("/login");
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
-      toast.success(error?.data?.message || "Logout Successfull");
-    } else if (error) {
-      toast.error(error?.data?.message || "Logout failed");
-    }
-  }, [error, isSuccess]);
+  const { isAuthenticated, role } = useSelector((state) => state.auth);
+  console.log(isAuthenticated, role);
+  
 
   return (
-    <nav className="bg-blue-600 text-white py-3 px-5 flex justify-between items-center shadow-lg">
+    <nav className="bg-blue-600 text-white py-3 px-5 flex justify-between items-center shadow-lg border-b-2">
       {/* Brand Logo */}
       <Link to="/" className="text-xl font-bold">
         CSTech
