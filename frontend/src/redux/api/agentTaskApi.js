@@ -9,7 +9,6 @@ export const agentTaskApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
     credentials: "include",
-    withCredentials: true,
   }),
   endpoints: (builder) => ({
     uploadTask: builder.mutation({
