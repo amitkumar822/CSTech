@@ -45,13 +45,6 @@ export const authUserApi = createApi({
         url: "/logout",
         method: "POST",
       }),
-      async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        try {
-          dispatch(userLoggedOut());
-        } catch (error) {
-          console.error("logoutUser Error: ", error);
-        }
-      },
     }),
 
     updateUserOrAgent: builder.mutation({

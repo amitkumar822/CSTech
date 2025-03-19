@@ -1,4 +1,6 @@
 import { useLogoutUserMutation } from "@/redux/api/authUserApi";
+import { userLoggedOut } from "@/redux/authSlice";
+import { Loader } from "lucide-react";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router";
@@ -9,19 +11,21 @@ const Logout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [logoutUser, { isSuccess, error, isLoading }] = useLogoutUserMutation();
+  const [logoutUser, { data, isSuccess, error, isLoading }] =
+    useLogoutUserMutation();
 
   const handleLogout = async () => {
     await logoutUser();
-    dispatch(userLoggedOut());
-    navigate("/login");
   };
+  console.log(data);
 
   useEffect(() => {
     if (isSuccess) {
-      toast.success(error?.data?.message || "Logout Successfull");
+      toast.success(data?.message || "Logout Successfull");
+      navigate("/login");
+      dispatch(userLoggedOut());
     } else if (error) {
-      toast.error(error?.data?.message || "Logout failed");
+      toast.error(error?.data.message || "Logout failed");
     }
   }, [error, isSuccess]);
   return (
@@ -34,7 +38,7 @@ const Logout = () => {
         >
           {isLoading ? (
             <span className="flex gap-2 justify-center items-center text-sm">
-              <Loader2 size={18} className="animate-spin" />
+              <Loader size={18} className="animate-spin" />
               Plase Wait
             </span>
           ) : (
