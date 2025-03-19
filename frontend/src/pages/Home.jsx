@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Code, Globe, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router";
 
 export default function Home() {
   return (
@@ -19,9 +20,11 @@ export default function Home() {
         <p className="text-lg sm:text-xl max-w-2xl mx-auto mb-6">
           Delivering innovative IT solutions with excellence and security.
         </p>
-        <Button className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-6 py-3 text-lg font-semibold">
+        <Link to="/login">
+        <Button className="bg-yellow-400 hover:bg-yellow-500 cursor-pointer text-gray-900 px-6 py-3 text-lg font-semibold">
           Get Started <ArrowRight className="ml-2" />
         </Button>
+        </Link>
       </section>
 
       {/* Services Section */}

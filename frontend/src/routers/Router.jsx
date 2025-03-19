@@ -12,6 +12,7 @@ import {
 } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
+import AgentDashboard from "@/pages/agent/AgentDashboard";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,6 +34,11 @@ const router = createBrowserRouter(
             <Route path="tasks" element={<AgentTaskList />} />
           </Route>
         </Route>
+      </Route>
+
+      {/* ✅ Protect Agent Dashboard Route (Only Agent Can Access) */}
+      <Route element={<ProtectedRoute allowedRoles={["agent"]} />}>
+        <Route path="/agent-dashboard" element={<AgentDashboard />} />
       </Route>
     </Route>
   )

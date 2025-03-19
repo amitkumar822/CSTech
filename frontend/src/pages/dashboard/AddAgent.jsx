@@ -191,7 +191,7 @@ export const AddAgent = () => {
 
           <Button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700"
+            className="w-full bg-blue-600 hover:bg-blue-700 cursor-pointer"
           >
             {agentToEdit ? "Update Agent" : "Add Agent"}
           </Button>

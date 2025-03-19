@@ -103,6 +103,7 @@ export default function ManageAgents() {
                         variant="outline"
                         size="sm"
                         onClick={() => handleEdit(agent)}
+                        className="cursor-pointer"
                       >
                         <Pencil className="w-4 h-4" />
                       </Button>
@@ -113,6 +114,7 @@ export default function ManageAgents() {
                           setDeleteModalOpen(true);
                           setDeleteAgentId(agent._id);
                         }}
+                        className="cursor-pointer"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
