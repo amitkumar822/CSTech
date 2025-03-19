@@ -6,6 +6,7 @@ import { Loader2, Menu } from "lucide-react";
 import { useLogoutUserMutation } from "@/redux/api/authUserApi";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import Logout from "./Logout";
 
 const Navbar = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -35,29 +36,13 @@ const Navbar = () => {
         CSTech
       </Link>
 
-      {/* Mobile Menu Icon */}
-      <div className="md:hidden">
-        <Menu size={24} />
-      </div>
-
       {/* Desktop Menu */}
-      <div className="hidden md:flex gap-4">
+      <div className="flex gap-4">
         {/* Conditional Rendering for Login/Logout */}
         {isAuthenticated ? (
-          <button
-            onClick={handleLogout}
-            disabled={isLoading}
-            className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg cursor-pointer"
-          >
-            {isLoading ? (
-              <span className="flex gap-2 justify-center items-center text-sm">
-                <Loader2 size={18} className="animate-spin" />
-                Plase Wait
-              </span>
-            ) : (
-              "Logout"
-            )}
-          </button>
+          <div className="md:block hidden">
+            <Logout />
+          </div>
         ) : (
           <Link
             to="/login"

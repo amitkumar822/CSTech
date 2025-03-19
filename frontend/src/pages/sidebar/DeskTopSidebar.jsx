@@ -7,10 +7,11 @@ import {
   UserPlus,
   ClipboardList,
   ListChecks,
+  Briefcase,
 } from "lucide-react";
 import { Link, NavLink } from "react-router";
 
-const Sidebar = () => {
+const DeskTopSidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
 
@@ -33,7 +34,14 @@ const Sidebar = () => {
       {/* Sidebar Header */}
       <div className="p-4 flex items-center justify-between border-b border-gray-700">
         {!isCollapsed && (
-          <h1 className="text-xl font-bold">CSTech Dashboard</h1>
+          <div className="flex items-center gap-2">
+            <Briefcase className="w-6 h-6 text-blue-500" />
+            <h1 className="text-lg font-bold">
+              <span className="text-blue-600">CS</span>
+              <span className="text-green-500">Tech</span>
+              <span className="text-gray-800"> Admin Hub</span>
+            </h1>
+          </div>
         )}
         <button
           onClick={toggleSidebar}
@@ -85,7 +93,7 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default DeskTopSidebar;
 
 // Sidebar data in JSON format for easy management
 export const sidebarData = [
@@ -108,7 +116,7 @@ export const sidebarData = [
         title: "Agent Tasks",
         icon: <ListChecks className="w-4 h-4" />,
         link: "/dashboard/agents/tasks",
-      }
+      },
     ],
   },
   // {

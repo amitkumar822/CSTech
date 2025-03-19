@@ -33,7 +33,7 @@ export default function AgentTaskList() {
                 <CardTitle className="text-lg font-semibold">
                   {agent.name}
                 </CardTitle>
-                <p className="text-sm flex gap-4">
+                <p className="md:text-sm text-xs flex md:gap-4 gap-1">
                   <a
                     href={`mailto:${agent.email}`}
                     className="text-blue-600 hover:underline"
