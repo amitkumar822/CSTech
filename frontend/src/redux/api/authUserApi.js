@@ -18,6 +18,7 @@ export const authUserApi = createApi({
         method: "POST",
         body: formInput,
       }),
+      invalidatesTags: ["Refresh_Agent"],
     }),
     loginUser: builder.mutation({
       query: (formInput) => ({
@@ -25,21 +26,23 @@ export const authUserApi = createApi({
         method: "POST",
         body: formInput,
       }),
-      async onQueryStarted(_, { queryFulfilled, dispatch }) {
-        try {
-          const res = await queryFulfilled;
-          const userData = res?.data?.data?.user;
+      // async onQueryStarted(_, { queryFulfilled, dispatch }) {
+      //   try {
+      //     const res = await queryFulfilled;
+      //     const userData = res?.data?.data?.user;
+      //     console.log("API LOign: ", userData);
+          
 
-          if (userData) {
-            dispatch(userLoggedIn({ user: userData }));
+      //     if (userData) {
+      //       dispatch(userLoggedIn({ user: userData }));
 
-            // Save to sessionStorage (so data persists until tab is closed)
-            sessionStorage.setItem("authUser", JSON.stringify(userData));
-          }
-        } catch (error) {
-          console.error("LoginError: ", error);
-        }
-      },
+      //       // Save to sessionStorage (so data persists until tab is closed)
+      //       sessionStorage.setItem("authUser", JSON.stringify(userData));
+      //     }
+      //   } catch (error) {
+      //     console.error("LoginError: ", error);
+      //   }
+      // },
     }),
     logoutUser: builder.mutation({
       query: () => ({

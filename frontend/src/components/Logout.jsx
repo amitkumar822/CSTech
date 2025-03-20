@@ -11,13 +11,13 @@ const Logout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Logout API calls
   const [logoutUser, { data, isSuccess, error, isLoading }] =
     useLogoutUserMutation();
 
   const handleLogout = async () => {
     await logoutUser();
   };
-  console.log(data);
 
   useEffect(() => {
     if (isSuccess) {
@@ -28,6 +28,7 @@ const Logout = () => {
       toast.error(error?.data.message || "Logout failed");
     }
   }, [error, isSuccess]);
+  
   return (
     <div>
       {isAuthenticated ? (

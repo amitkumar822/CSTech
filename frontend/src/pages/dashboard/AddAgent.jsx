@@ -42,7 +42,7 @@ export const AddAgent = () => {
     reset,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(agentSchema), // Attach schema validation
+    resolver: agentToEdit ? "" : zodResolver(agentSchema), // Attach schema validation
     mode: "onChange", // Validate on change
     defaultValues: agentToEdit || {
       name: "",
@@ -69,6 +69,7 @@ export const AddAgent = () => {
   ] = useUpdateUserOrAgentMutation();
 
   const onSubmit = async (formInput) => {
+    toast.info("CLICK TO UPDATE")
     if (agentToEdit) {
       // update an existing agent
       const agentId = agentToEdit._id;
@@ -100,7 +101,7 @@ export const AddAgent = () => {
         error?.data?.message || updateError?.data?.message || "Please try again"
       );
     }
-  }, [error, isSuccess, isUpdateSuccess, updateError]);
+  }, [error, isSuccess, isUpdateSuccess, updateError, updatedData]);
 
   //^ set edit agent data in form input
   useEffect(() => {
