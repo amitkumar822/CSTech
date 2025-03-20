@@ -69,7 +69,6 @@ export const AddAgent = () => {
   ] = useUpdateUserOrAgentMutation();
 
   const onSubmit = async (formInput) => {
-    toast.info("CLICK TO UPDATE")
     if (agentToEdit) {
       // update an existing agent
       const agentId = agentToEdit._id;
