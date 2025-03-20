@@ -18,7 +18,9 @@ const agentSchema = z
   .object({
     name: z.string().min(2, "Name must be at least 2 characters"),
     email: z.string().email("Invalid email address"),
-    mobile: z.string().regex(/^\+\d{1,3}\d{7,15}$/, "Invalid mobile number"),
+    mobile: z
+      .string()
+      .regex(/^\+\d{1,3}\d{7,15}$/, "Invalid mobile number Ex. +91xxxxxxxx86"),
     password: z.string().min(4, "Password must be at least 4 characters"),
     confirmpassword: z
       .string()
@@ -40,6 +42,8 @@ export const AddAgent = () => {
     reset,
     formState: { errors },
   } = useForm({
+    resolver: zodResolver(agentSchema), // Attach schema validation
+    mode: "onChange", // Validate on change
     defaultValues: agentToEdit || {
       name: "",
       email: "",
@@ -49,6 +53,7 @@ export const AddAgent = () => {
     },
   });
 
+  // New Agent Registration
   const [registerUser, { data, isSuccess, error, isLoading }] =
     useRegisterUserMutation();
 
@@ -83,7 +88,7 @@ export const AddAgent = () => {
     if (isSuccess || isUpdateSuccess) {
       toast.success(
         data?.message ||
-        updatedData?.message ||
+          updatedData?.message ||
           "Agent successfully created and added to the system"
       );
       reset();
@@ -191,9 +196,17 @@ export const AddAgent = () => {
 
           <Button
             type="submit"
+            disabled={isLoading || isUpdateLoading}
             className="w-full bg-blue-600 hover:bg-blue-700 cursor-pointer"
           >
-            {agentToEdit ? "Update Agent" : "Add Agent"}
+            {isLoading || isUpdateLoading ? (
+              <span className="flex gap-2 items-center justify-center">
+                <Loader2 className="animate-spin" />
+                Processing...
+              </span>
+            ) : (
+              <span>{agentToEdit ? "Update Agent" : "Add Agent"}</span>
+            )}
           </Button>
         </form>
       </div>
