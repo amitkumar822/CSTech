@@ -15,6 +15,9 @@ import {
  * @access Private
  */
 export const uploadTaskFile = asyncHandler(async (req, res) => {
+  const { adminId } = req;
+  console.log(adminId);
+
   if (!req.file) {
     throw new ApiError(400, "No file uploaded");
   }
@@ -28,7 +31,7 @@ export const uploadTaskFile = asyncHandler(async (req, res) => {
     );
   }
 
-  const assignedTasks = await distributeTasks(records);
+  const assignedTasks = await distributeTasks(records, adminId);
 
   res
     .status(200)
@@ -40,8 +43,12 @@ export const uploadTaskFile = asyncHandler(async (req, res) => {
  * @route GET /get-all-tasks
  * @access Private
  */
-export const getTaskDistribution = asyncHandler(async (_, res) => {
-  const tasks = await AgentTask.find({})
+export const getTaskDistribution = asyncHandler(async (req, res) => {
+  const {adminId} = req;
+  console.log(adminId);
+  
+
+  const tasks = await AgentTask.find({adminId})
     .populate({
       path: "agentId",
       select: "name email mobile",

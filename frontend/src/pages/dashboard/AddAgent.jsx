@@ -91,7 +91,7 @@ export const AddAgent = () => {
           updatedData?.message ||
           "Agent successfully created and added to the system"
       );
-      reset();
+      // reset();
       if (isUpdateSuccess) {
         navigate("/dashboard/agents/manage");
       }

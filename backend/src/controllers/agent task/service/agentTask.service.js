@@ -3,6 +3,7 @@ import fs from "fs";
 import csvParser from "csv-parser";
 import xlsx from "xlsx";
 import AgentTask from "../../../models/agentTask.model.js";
+import { ApiError } from "../../../../utils/ApiError.js";
 
 // ✅ Parse CSV/XLSX file
 export const parseFile = async (file) => {
@@ -53,7 +54,7 @@ export const validateTaskFormat = (records) => {
 };
 
 // ✅ Distribute Tasks Among Agents
-export const distributeTasks = async (records) => {
+export const distributeTasks = async (records, adminId) => {
   const agents = await User.find({ role: "agent" }).select("_id");
 
   if (agents.length < 5) {
@@ -67,6 +68,7 @@ export const distributeTasks = async (records) => {
     firstName: record.firstname,
     phone: record.phone,
     notes: record.notes,
+    adminId,
     agentId: agents[index % agents.length]._id, // ✅ Distribute evenly
   }));
 

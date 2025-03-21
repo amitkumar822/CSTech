@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const AgentTaskSchema = new mongoose.Schema({
+  adminId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: [true, "Agent ID is required"],
+  },
   firstName: {
     type: String,
     required: [true, "First Name is required"],
