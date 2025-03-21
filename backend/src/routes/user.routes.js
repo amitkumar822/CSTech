@@ -11,9 +11,9 @@ import { isAdminAuth, isUserLoggedIn } from "../middlewares/auth.js";
 
 const router = Router();
 
-router.post("/register", registerUser);
+router.post("/register", isAdminAuth, registerUser);
 router.post("/login", loginUser);
-router.post("/logout", isUserLoggedIn, logOut);
+router.post("/logout", logOut);
 router.put("/update/:userId", updateUser);
 
 //^ Agent routes

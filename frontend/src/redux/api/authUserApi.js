@@ -26,23 +26,21 @@ export const authUserApi = createApi({
         method: "POST",
         body: formInput,
       }),
-      // async onQueryStarted(_, { queryFulfilled, dispatch }) {
-      //   try {
-      //     const res = await queryFulfilled;
-      //     const userData = res?.data?.data?.user;
-      //     console.log("API LOign: ", userData);
-          
+      async onQueryStarted(_, { queryFulfilled, dispatch }) {
+        try {
+          const res = await queryFulfilled;
+          const userData = res?.data?.data?.user;
 
-      //     if (userData) {
-      //       dispatch(userLoggedIn({ user: userData }));
+          if (userData) {
+            dispatch(userLoggedIn({ user: userData }));
 
-      //       // Save to sessionStorage (so data persists until tab is closed)
-      //       sessionStorage.setItem("authUser", JSON.stringify(userData));
-      //     }
-      //   } catch (error) {
-      //     console.error("LoginError: ", error);
-      //   }
-      // },
+            // Save to sessionStorage (so data persists until tab is closed)
+            sessionStorage.setItem("authUser", JSON.stringify(userData));
+          }
+        } catch (error) {
+          console.error("LoginError: ", error);
+        }
+      },
     }),
     logoutUser: builder.mutation({
       query: () => ({
@@ -52,7 +50,7 @@ export const authUserApi = createApi({
     }),
 
     updateUserOrAgent: builder.mutation({
-      query: ({editFormInput, agentId}) => ({
+      query: ({ editFormInput, agentId }) => ({
         url: `/update/${agentId}`,
         method: "PUT",
         body: editFormInput,

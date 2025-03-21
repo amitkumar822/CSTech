@@ -11,7 +11,10 @@ import { User } from "../models/user.model.js";
  * @access Public
  */
 export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, mobile, password } = req.body;
+  const { adminId } = req;
+  console.log(adminId);
+
+  const { name, email, mobile, password, role } = req.body;
 
   const existingUser = await User.findOne({ email }).lean();
   if (existingUser) {
@@ -23,6 +26,8 @@ export const registerUser = asyncHandler(async (req, res) => {
     email,
     mobile,
     password,
+    role,
+    adminId,
   });
 
   // Save user to database
@@ -40,6 +45,7 @@ export const registerUser = asyncHandler(async (req, res) => {
  */
 export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+  console.log(req.body);
 
   const user = await User.findOne({ email }).select("+password");
   if (!user) {
@@ -76,14 +82,14 @@ export const loginUser = asyncHandler(async (req, res) => {
  * @access Public
  */
 export const logOut = asyncHandler(async (req, res) => {
-  const { userId } = req;
+  // const { userId } = req;
 
-  // Remove refresh token from database
-  await User.findByIdAndUpdate(
-    userId,
-    { $set: { jwtToken: "" } },
-    { new: true }
-  );
+  // // Remove refresh token from database
+  // await User.findByIdAndUpdate(
+  //   userId,
+  //   { $set: { jwtToken: "" } },
+  //   { new: true }
+  // );
 
   res.clearCookie("jwtToken", {
     httpOnly: true,
@@ -105,8 +111,6 @@ export const updateUser = asyncHandler(async (req, res) => {
   const { userId } = req.params;
   console.log(req.body);
   console.log(userId);
-  
-  
 
   const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
     new: true,
@@ -144,8 +148,11 @@ export const deleteUser = asyncHandler(async (req, res) => {
  * @route GET /get-all-agents
  * @access Private (Admin)
  */
-export const getAllAgents = asyncHandler(async (_, res) => {
-  const agents = await User.find({ role: "agent" }).select("-password").lean();
+export const getAllAgents = asyncHandler(async (req, res) => {
+  const { adminId } = req;
+  console.log("getAllAgentId: ", adminId);
+  
+  const agents = await User.find({ adminId }).select("-password").lean();
   if (!agents) {
     throw new ApiError(404, "No agents found");
   }

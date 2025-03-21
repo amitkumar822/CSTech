@@ -1,12 +1,8 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-const userSchema = new mongoose.Schema(
+const adminSchema = new mongoose.Schema(
   {
-    adminId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
     name: {
       type: String,
       required: [true, "Name is required"],
@@ -37,8 +33,8 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "agent"],
-      default: "agent",
+      enum: ["admin"],
+      default: "admin",
     },
     isActive: {
       type: Boolean,
@@ -52,7 +48,7 @@ const userSchema = new mongoose.Schema(
 );
 
 // **Pre-save middleware to hash passwords**
-userSchema.pre("save", async function (next) {
+adminSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
@@ -60,8 +56,8 @@ userSchema.pre("save", async function (next) {
 });
 
 // **Method to compare passwords securely**
-userSchema.methods.comparePassword = async function (enteredPassword) {
+adminSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-export const User = mongoose.model("User", userSchema);
+export const Admin = mongoose.model("Admin", adminSchema);

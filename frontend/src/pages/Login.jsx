@@ -16,6 +16,8 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { userLoggedIn } from "@/redux/authSlice";
 import { useDispatch } from "react-redux";
+import axios from "axios";
+import { useNavigate } from "react-router";
 
 // Zod Schema for Validation
 const loginSchema = z.object({
@@ -25,6 +27,7 @@ const loginSchema = z.object({
 
 export const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -40,11 +43,10 @@ export const Login = () => {
     useLoginUserMutation();
 
   const onSubmit = async (formInput) => {
-    loginUser(formInput);
+    await loginUser(formInput);
   };
 
-  console.log(data);
-  
+  console.log(data, isSuccess, error, isLoading);
 
   useEffect(() => {
     if (isSuccess) {

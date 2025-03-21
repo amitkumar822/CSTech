@@ -21,6 +21,8 @@ export const isAdminAuth = asyncHandler(async (req, _, next) => {
     throw new ApiError(403, "Unauthorized Access");
   }
 
+  req.adminId = user._id;
+
   next();
 });
 
