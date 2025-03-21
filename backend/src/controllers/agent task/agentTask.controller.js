@@ -16,7 +16,6 @@ import {
  */
 export const uploadTaskFile = asyncHandler(async (req, res) => {
   const { adminId } = req;
-  console.log(adminId);
 
   if (!req.file) {
     throw new ApiError(400, "No file uploaded");
@@ -45,7 +44,6 @@ export const uploadTaskFile = asyncHandler(async (req, res) => {
  */
 export const getTaskDistribution = asyncHandler(async (req, res) => {
   const {adminId} = req;
-  console.log(adminId);
   
 
   const tasks = await AgentTask.find({adminId})

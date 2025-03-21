@@ -55,7 +55,7 @@ export const validateTaskFormat = (records) => {
 
 // ✅ Distribute Tasks Among Agents
 export const distributeTasks = async (records, adminId) => {
-  const agents = await User.find({ role: "agent" }).select("_id");
+  const agents = await User.find({ adminId }).select("_id");
 
   if (agents.length < 5) {
     throw new ApiError(

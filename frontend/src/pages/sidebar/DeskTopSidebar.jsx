@@ -10,8 +10,11 @@ import {
   Briefcase,
 } from "lucide-react";
 import { Link, NavLink } from "react-router";
+import { useSelector } from "react-redux";
 
 const DeskTopSidebar = () => {
+  const { user } = useSelector((state) => state.auth);
+
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
 
@@ -34,14 +37,22 @@ const DeskTopSidebar = () => {
       {/* Sidebar Header */}
       <div className="p-4 flex items-center justify-between border-b border-gray-700">
         {!isCollapsed && (
-          <Link to="/dashboard" className="flex items-center gap-2">
-            <Briefcase className="w-6 h-6 text-blue-500" />
-            <h1 className="text-lg font-bold">
-              <span className="text-blue-600">CS</span>
-              <span className="text-green-500">Tech</span>
-              <span className="text-gray-800"> Admin Hub</span>
-            </h1>
-          </Link>
+          <div className="">
+            <Link to="/dashboard" className="flex items-center gap-2">
+              <Briefcase className="w-6 h-6 text-blue-500" />
+              <h1 className="text-lg font-bold">
+                <span className="text-blue-600">CS</span>
+                <span className="text-green-500">Tech</span>
+                <span className="text-gray-800"> Admin Hub</span>
+              </h1>
+            </Link>
+
+            <div className="border p-2 mt-4 text-sm">
+              <h1>Name: {user?.name}</h1>
+              <h1>email: {user?.email}</h1>
+              <h1>mobile: {user?.mobile}</h1>
+            </div>
+          </div>
         )}
         <button
           onClick={toggleSidebar}

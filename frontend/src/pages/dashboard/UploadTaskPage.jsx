@@ -111,7 +111,7 @@ export default function UploadTaskPage() {
 
           <Button
             onClick={handleSubmit}
-            className="w-full mt-4"
+            className="w-full mt-4 cursor-pointer"
             disabled={!file || isLoading}
           >
             Upload File

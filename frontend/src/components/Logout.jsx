@@ -24,6 +24,9 @@ const Logout = () => {
       toast.success(data?.message || "Logout Successfull");
       navigate("/login");
       dispatch(userLoggedOut());
+      setTimeout(() => {
+        window.location.reload();
+      }, 200);
     } else if (error) {
       toast.error(error?.data.message || "Logout failed");
     }
