@@ -21,7 +21,7 @@ const Logout = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      toast.success(data?.message || "Logout Successfull");
+      toast.success(data?.message || "Logout Successfully");
       navigate("/login");
       dispatch(userLoggedOut());
       setTimeout(() => {
@@ -43,7 +43,7 @@ const Logout = () => {
           {isLoading ? (
             <span className="flex gap-2 justify-center items-center text-sm">
               <Loader size={18} className="animate-spin" />
-              Plase Wait
+              Please Wait
             </span>
           ) : (
             "Logout"

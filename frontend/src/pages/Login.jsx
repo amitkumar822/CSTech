@@ -27,7 +27,6 @@ const loginSchema = z.object({
 
 export const Login = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const {
     register,
@@ -46,11 +45,10 @@ export const Login = () => {
     await loginUser(formInput);
   };
 
-  console.log(data, isSuccess, error, isLoading);
 
   useEffect(() => {
     if (isSuccess) {
-      toast.success(data?.message || "Login Successfull");
+      toast.success(data?.message || "Login Successfully");
       const userData = data?.data?.user;
       dispatch(userLoggedIn({ user: userData }));
       reset();
