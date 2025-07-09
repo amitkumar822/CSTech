@@ -11,7 +11,7 @@ import { isAdminAuth, isUserLoggedIn } from "../middlewares/auth.js";
 
 const router = Router();
 
-router.post("/register", isAdminAuth, registerUser);
+router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/logout", logOut);
 router.put("/update/:userId", updateUser);

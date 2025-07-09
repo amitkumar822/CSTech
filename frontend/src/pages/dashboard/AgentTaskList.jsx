@@ -18,7 +18,6 @@ import {
 
 export default function AgentTaskList() {
   const { data: tasks, isLoading } = useGetAllAgentTasksQuery();
-  console.log(tasks?.length);
 
   if (isLoading) return <Loading />;
   if (tasks?.length === "undefined") return <span>No Record Found</span>;

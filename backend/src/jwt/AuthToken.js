@@ -14,7 +14,7 @@ const createTokensAndSaveCookies = async (userId, res) => {
   res.cookie("jwtToken", jwtToken, {
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: "None",
     maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
   });
 
